@@ -1,29 +1,35 @@
   
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, HttpCode, Res, Req } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
+import { LoginUserDto } from './dto/login-user.dto';
 
-@Controller('users')
+@Controller()
 export class UserController {
 
-    constructor(private usersService: UserService) {
+    constructor(private userService: UserService) {}
 
-    }
-
-    @Post() 
+    @Post('register')
+    @HttpCode(201)
     async create(@Body() registerUserDto: RegisterUserDto) {
-        return await this.usersService.create(registerUserDto);
+        return await this.userService.create(registerUserDto);
     }
 
-    // This route will require successfully passing our default auth strategy (JWT) in order
-    // to access the route
-    @Get('test')
+    @Post('login')
+    @HttpCode(200)
+    async login(@Body() loginUserDto: LoginUserDto, @Res() res: any) {
+        const jwt = await this.userService.loginUser(loginUserDto);
+        res.json({
+            access_token: jwt,
+        })
+    }
+
+    @Get('users')
     @UseGuards(AuthGuard())
-    testAuthRoute(){
-        return {
-            message: 'You did it!'
-        }
+    async findAllUsers(@Req() req: any){
+        console.log(req.user);
+        return await this.userService.findAllUsers();
     }
 
 }
