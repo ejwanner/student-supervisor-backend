@@ -3,22 +3,21 @@ import * as bcrypt from 'bcrypt';
 import { User } from './user.interface';
 
 export const UserSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        index: {
-            unique: true,
-        },
-        required: true
+  email: {
+    type: String,
+    index: {
+      unique: true,
     },
-    password: {
-        type: String,
-        required: true
-    },
-    supervisor: {
-        type: Boolean,
-        required: true
-    }
-
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  supervisor: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 // UserSchema.pre<User>('save', function(next){
@@ -43,7 +42,7 @@ export const UserSchema = new mongoose.Schema({
 
 //     });
 
-// }); 
+// });
 
 // UserSchema.methods.comparePassword = function(attempt, callback){
 //     let user: User = this;
