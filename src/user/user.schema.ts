@@ -1,6 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
-import { User } from './user.interface';
 
 export const UserSchema = new mongoose.Schema({
   email: {
@@ -8,6 +6,7 @@ export const UserSchema = new mongoose.Schema({
     index: {
       unique: true,
     },
+<<<<<<< HEAD
     required: true,
   },
   password: {
@@ -53,3 +52,16 @@ export const UserSchema = new mongoose.Schema({
 //     });
 
 // };
+=======
+    password: {
+        type: String,
+        required: true
+    },
+    supervisor: {
+        type: Boolean,
+        required: true
+    }
+    // TODO: name
+    // TODO: category
+});
+>>>>>>> fa168c0... update thesis and category
