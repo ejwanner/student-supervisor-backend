@@ -23,7 +23,7 @@ export class UserService {
       const user = new this.userModel(registerUserDto);
       return user.save();
     } else {
-      throw new HttpException('Email already in use', HttpStatus.CONFLICT);
+      throw new HttpException('Email already in use!', HttpStatus.CONFLICT);
     }
   }
 
