@@ -5,6 +5,7 @@ import { User } from './user.interface';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
+import { UserInfoDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -40,7 +41,8 @@ export class UserService {
           HttpStatus.UNAUTHORIZED,
         );
       }
-      return this.authService.generateJwt(user);
+      const jwt = await this.authService.generateJwt(user);
+      return { userInfo: user, access_token: jwt };
     } else {
       throw new HttpException(
         'Login was not successful',
@@ -52,6 +54,13 @@ export class UserService {
   async findAllUsers() {
     return this.userModel.find();
   }
+
+  async update(user: UserInfoDto) {
+    return this.userModel.findOneAndUpdate({ email: user.email }, user, {
+      new: true,
+    });
+  }
+
   private async findUserByEmail(email: string) {
     return this.userModel.findOne({ email: email });
   }
