@@ -5,7 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { ThesisModule } from "./thesis/thesis.module";
+import { ThesisModule } from './thesis/thesis.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -14,10 +15,10 @@ import { ThesisModule } from "./thesis/thesis.module";
     ),
     AuthModule,
     UserModule,
-    ThesisModule
+    ThesisModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-
