@@ -1,19 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
+import { JWT_SECRET } from '../../shared/constants';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: JWT_SECRET,
+    });
+  }
 
-    constructor(){
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: 'Hier234234Koennte532409582Ihre890234890Werbung802934890Stehen!!29038490'
-        });
-    }
-
-    async validate(payload: any){
-        return { payload };
-    }
-
+  async validate(payload: any) {
+    return { payload };
+  }
 }

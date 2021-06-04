@@ -1,0 +1,2 @@
+export const JWT_SECRET =
+  'Hier234234Koennte532409582Ihre890234890Werbung802934890Stehen!!29038490';

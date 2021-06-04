@@ -8,12 +8,12 @@ import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
-    AuthModule
+    AuthModule,
   ],
   exports: [UserService],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService],
 })
 export class UserModule {}
