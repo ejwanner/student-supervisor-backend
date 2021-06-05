@@ -27,10 +27,11 @@ export class ChatGateway
       client.handshake.query.token as string,
     );
     const conversation = await this.chatService.findRoomById(
-      message.message.conversation,
+      message.conversation,
     );
 
-    this.server.emit('msgToClient', message.message);
+    this.server.emit(`receive-${conversation.owner._id}`, message);
+    this.server.emit(`receive-${conversation.participant._id}`, message);
   }
 
   afterInit(server: Server) {

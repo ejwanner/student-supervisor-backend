@@ -20,6 +20,15 @@ export class ChatController {
     return this.chatService.findAllConversations(user);
   }
 
+  @Get('message')
+  @UseGuards(AuthGuard('jwt'))
+  async findMessages(@Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    return this.chatService.findMessages(user);
+  }
+
   @Post('conversation/create')
   @UseGuards(AuthGuard('jwt'))
   async createConversation(@Body() conversation: CreateConversationDto) {

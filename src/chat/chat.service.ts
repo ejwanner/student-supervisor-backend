@@ -37,12 +37,15 @@ export class ChatService {
       .find({
         $or: [{ owner: user }, { participant: user }],
       } as any)
-      .populate('owner')
-      .populate('participant');
+      .populate('owner', '-password')
+      .populate('participant', '-password');
   }
 
   async findRoomById(id: any) {
-    return this.conversationModel.findOne({ _id: id });
+    return this.conversationModel
+      .findOne({ _id: id })
+      .populate('owner', '-password')
+      .populate('participant', '-password');
   }
 
   async sendMessage(message: Message, token: string) {
@@ -55,8 +58,16 @@ export class ChatService {
     newMessage.createdBy = hostedUser;
     newMessage.message = message.message;
     newMessage.conversation = await this.findRoomById(
-      mongoose.Types.ObjectId(message.conversation as any),
+      mongoose.Types.ObjectId(message.conversation._id),
     );
-    return { message: await newMessage.save(), hostedUser };
+    return newMessage.save();
+  }
+
+  async findMessages(user: User) {
+    const myConversations = await this.findAllConversations(user);
+    return this.messageModel
+      .find({ conversation: { $in: myConversations.map((conv) => conv._id) } })
+      .populate('conversation')
+      .populate('createdBy');
   }
 }
