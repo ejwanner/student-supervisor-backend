@@ -34,6 +34,7 @@ export class UserController {
     const response = {
       access_token: access_token,
       userInfo: {
+        _id: userInfo._id,
         name: userInfo.name,
         email: userInfo.email,
         supervisor: userInfo.supervisor,

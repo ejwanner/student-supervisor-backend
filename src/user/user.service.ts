@@ -61,7 +61,7 @@ export class UserService {
     });
   }
 
-  private async findUserByEmail(email: string) {
+  async findUserByEmail(email: string) {
     return this.userModel.findOne({ email: email });
   }
 
