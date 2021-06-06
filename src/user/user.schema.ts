@@ -20,6 +20,8 @@ export const UserSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
-  // TODO: name
-  // TODO: category
+  preferredCategory: {
+    type: String,
+    required: true,
+  },
 });
