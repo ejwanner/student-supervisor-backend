@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ThesisModule } from './thesis/thesis.module';
 import { CategoryModule } from './category/category.module';
+import { StatusModule } from './status/status.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CategoryModule } from './category/category.module';
     UserModule,
     ThesisModule,
     CategoryModule,
+    StatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],
