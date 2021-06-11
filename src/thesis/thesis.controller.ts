@@ -1,32 +1,89 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, Res, UseGuards } from "@nestjs/common";
 import { ThesisService } from './thesis.service';
+import { AuthGuard } from '@nestjs/passport';
+import { UserService } from "../user/user.service";
+import { CreateThesisDto } from "./dto/create-thesis.dto";
+import { UpdateThesisDto } from "./dto/update-thesis.dto";
+import { log } from "util";
 
 @Controller()
 export class ThesisController {
-  constructor(private thesisService: ThesisService) {}
+  constructor(
+    private thesisService: ThesisService,
+    private userService: UserService,
+  ) {}
 
-  // Get all theses'
+  // GET all theses
   @Get('theses')
-  async getTheses() {}
+  @UseGuards(AuthGuard('jwt'))
+  async getTheses() {
+    return await this.thesisService.getAllThese();
+  }
 
-  // Get one thesis
-  @Get('thesis/detail/:thesisId')
-  async getThesis() {}
+  // GET one thesis by ID
+  @Get('thesis/:thesisId')
+  @UseGuards(AuthGuard('jwt'))
+  async getThesis(@Param('thesisId') thesisId: string) {
+    return await this.thesisService.getOneThesis(thesisId);
+  }
 
-  // Add new thesis
+  // ADD one thesis
   @Post('thesis')
-  async addThesis() {}
+  @UseGuards(AuthGuard('jwt'))
+  async addThesis(@Body() createThesisDto: CreateThesisDto, @Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    return this.thesisService.createThesis(createThesisDto, user);
+  }
 
-  // Edit thesis
-  // student can select the thesis and supervisor can change the informations in the thesis
-  @Post('thesis/:thesisId')
-  async updateThesis() {}
+  // Supervisor update one thesis
+  @Put('thesis/:thesisId')
+  @UseGuards(AuthGuard('jwt'))
+  async updateThesis(@Body() updateThesisDto: UpdateThesisDto, @Param('thesisId') thesisId: string, @Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    return await this.thesisService.supervisorUpdateThesis(updateThesisDto, thesisId, user);
+  }
 
   // Student select one thesis
-  @Post('thesis/detail/:userId')
-  async selectThesis() {}
+  @Put('thesis/student/:thesisId')
+  @UseGuards(AuthGuard('jwt'))
+  async studentSelectThesis(@Param('thesisId') thesisId: string, @Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    return this.thesisService.studentSelectThesis(thesisId, user);
+  }
 
-  // Get all these of one supervisor
-  @Get('thesis/:userId')
-  async getSupervisorThese() {}
+  @Get('thesis/supervisor/sv-theses')
+  @UseGuards(AuthGuard('jwt'))
+  async getSupervisorTheses(@Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    return await this.thesisService.getAllSupervisorTheses(user);
+  }
+
+  // GET all second supervisor for one thesis depends on their preferred category
+  @Get('thesis/supervisor/second')
+  @UseGuards(AuthGuard('jwt'))
+  async getSecondSupervisor(@Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    return await this.thesisService.getSecondSupervisor(user);
+  }
+
+  @Get('thesis/supervisor/second/sv-theses')
+  @UseGuards(AuthGuard('jwt'))
+  async getSecondSupervisorTheses(@Req() req: any) {
+    const user = await this.userService.findUserByEmail(
+      req.user.payload.user.email,
+    );
+    const test =  await this.thesisService.getAllSecondSupervisorTheses(user);
+    console.log(test);
+    return test;
+  }
 }

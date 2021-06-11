@@ -46,14 +46,14 @@ export class UserController {
 
   @Get('users')
   @UseGuards(AuthGuard())
-  async findAllUsers(@Req() req: any) {
+  async findAllUsers() {
     return await this.userService.findAllUsers();
   }
 
   @Put('user')
   @UseGuards(AuthGuard())
   async updateUser(@Body() user: UserInfoDto, @Res() res: any) {
-    const { name, email, supervisor } = await this.userService.update(user);
+    const { name, email, supervisor } = await this.userService.updateUser(user);
     res.json({ name, email, supervisor });
   }
 }

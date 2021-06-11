@@ -11,4 +11,6 @@ export class RegisterUserDto {
   password: string;
 
   supervisor: boolean;
+
+  // TODO: add preferred category
 }

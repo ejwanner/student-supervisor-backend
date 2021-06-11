@@ -55,7 +55,7 @@ export class UserService {
     return this.userModel.find();
   }
 
-  async update(user: UserInfoDto) {
+  async updateUser(user: UserInfoDto) {
     return this.userModel.findOneAndUpdate({ email: user.email }, user, {
       new: true,
     });
@@ -63,6 +63,25 @@ export class UserService {
 
   async findUserByEmail(email: string) {
     return this.userModel.findOne({ email: email });
+  }
+
+  async findSecondSupervisor(user: User) {
+    return new Promise((resolve, reject) => {
+      this.userModel.find({'preferredCategory': user.preferredCategory, 'supervisor': true})
+        .then(items => {
+          resolve(items);
+        })
+        .catch(err => {
+          reject(err);
+        })
+    })
+    return this.userModel.find({'preferredCategory': user.preferredCategory, 'supervisor': true})
+      .then(items => {
+        return items;
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   private mailNotExists(email: string) {
@@ -78,4 +97,5 @@ export class UserService {
       });
     });
   }
+
 }

@@ -16,8 +16,7 @@ export const ThesisSchema = new mongoose.Schema({
     type: String
   },
   is_billed: {
-    type: Boolean,
-    required: true
+    type: Boolean
   },
   category: {
     type: String,
@@ -25,12 +24,15 @@ export const ThesisSchema = new mongoose.Schema({
   },
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: 'User'
   },
   supervisorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  secondSupervisorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
